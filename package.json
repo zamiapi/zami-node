@@ -1,5 +1,5 @@
 {
-  "name": "zami-node",
+  "name": "zami",
   "version": "1.0.0",
   "description": "Typescript/Node.js library to send and receive messages across popular chat networks like WhatsApp and Instagram",
   "main": "dist/index.js",

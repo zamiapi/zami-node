@@ -1,6 +1,6 @@
 # Zami Node.js SDK
 
-Node.js Library for the Zami API.
+Node.js Library for the Zami API. Currently supports WhatsApp and Instagram. Support for LinkedIn, X, Telegram, Signal and Messenger is coming soon.
 
 ## Install
 
@@ -19,32 +19,58 @@ import { Zami } from "zami";
 const zami = new Zami("om-secret-abcdefhijklmnopqrstuvwxyz");
 ```
 
-## Usage by network
+Once you have an API secret and you've logged in to the dashboard you should create your first connection, a connection represents an account you've connected to Zami to send and receive messages, it could be a WhatsApp number or Instagram account.
 
-- [WhatsApp]()
-- [Instagram]()
-
-### WhatsApp
+## Usage
 
 **Sending text messages**
 
 ```js
 import { Zami } from "zami";
 const zami = new Zami("om-secret-abcdefhijklmnopqrstuvwxyz");
+
+zami.sendText({
+  connection_id: "<connection_id>",
+  recipient: "+18096968926",
+  body: "Hello from Zami",
+});
 ```
 
 **Sending media messages (image/video/audio)**
 
 ```js
 import { Zami } from "zami";
-const Zami = new Zami("om-secret-abcdefhijklmnopqrstuvwxyz");
+import fs from "fs/promises";
+const zami = new Zami("om-secret-abcdefhijklmnopqrstuvwxyz");
+
+async function send() {
+  const buffer = await readFile("path/to/image.png");
+  await zami.sendMedia({
+    connection_id: "<connection_id>",
+    media: buffer,
+    content_type: "image/png",
+    recipient: "+18096968926",
+  });
+}
+
+send();
 ```
 
 **Receiving incoming messages**
 
-To receive messages you need to register a webhook in the dashboard. Zami will call the webhook URL and pass new message data.
+```js
+import { Zami } from "zami";
+import fs from "fs/promises";
+const zami = new Zami("om-secret-abcdefhijklmnopqrstuvwxyz");
 
-It's likely during development your server will be running in localhost and not be publicly accesible, we recommend using [ngrok](https://google.com) during development to create a publicly accesible tunnel to your development server.
+zami.listen((message) => {
+  console.log("New message: " + JSON.stringify(message));
+});
+```
+
+Alternatively you can register a webhook in the dashboard, Zami will call the webhook URL and pass new message data.
+
+If you decide with the webhook route, it's likely during development your server will be running in localhost and not be publicly accesible, we recommend using [ngrok](https://google.com) during development to create a publicly accesible tunnel to your development server.
 
 The sample script below creates a /webhook endpoint which you can register in the dashboard to test and see incoming message data.
 
