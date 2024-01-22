@@ -88,6 +88,31 @@ export default class Zami {
 
     return dataSend.id;
   }
+
+  async listen(callback: (message: any) => void) {
+    const response = await fetch(`${apiBase}/events`, {
+      headers: {
+        Authorization: this.apiSecret,
+      },
+    });
+
+    const reader = response.body?.getReader();
+
+    if (reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (value) {
+          const message = new TextDecoder("utf-8").decode(value);
+          callback(JSON.parse(message));
+        }
+
+        if (done) {
+          return;
+        }
+      }
+    }
+  }
 }
 
 export * from "./types";

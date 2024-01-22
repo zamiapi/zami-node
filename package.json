@@ -4,12 +4,15 @@
   "description": "Typescript/Node.js library to send and receive messages across popular chat networks like WhatsApp and Instagram",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-listen": "ts-node ./tests/test-listen.ts"
   },
   "author": "delgiudices",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.11.5",
+    "dotenv": "^16.3.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }
