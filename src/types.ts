@@ -7,7 +7,7 @@ export interface SendTextParams {
 
 export interface UploadMediaParams {
   media: Buffer;
-  contentType: string;
+  content_type: string;
 }
 
 export type SendMediaParams = {

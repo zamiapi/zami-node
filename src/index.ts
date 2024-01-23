@@ -38,7 +38,7 @@ export default class Zami {
       method: "POST",
       headers: {
         Authorization: `${this.apiSecret}`,
-        "Content-Type": params.contentType,
+        "Content-Type": params.content_type,
       },
       body: params.media,
     });
@@ -55,6 +55,23 @@ export default class Zami {
     return data.id;
   }
 
+  async downloadMedia(mediaId: string) {
+    const response = await fetch(`${apiBase}/download-media/${mediaId}`, {
+      headers: {
+        Authorization: `${this.apiSecret}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      const message = await response.json().then((data) => data.message);
+      throw new Error(
+        `Failed to download media, response status code: ${response.status}, message: ${message}`
+      );
+    }
+
+    return Buffer.from(await response.arrayBuffer());
+  }
+
   async sendMedia(params: SendMediaParams) {
     let mediaId: string | undefined = undefined;
     if (params.media_id) {
@@ -62,7 +79,7 @@ export default class Zami {
     } else if (params.media) {
       mediaId = await this.uploadMedia({
         media: params.media,
-        contentType: params.content_type,
+        content_type: params.content_type,
       });
     }
 
