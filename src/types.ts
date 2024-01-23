@@ -20,9 +20,7 @@ export type SendMediaParams = {
   | { media_id: string; media: undefined }
 );
 
-export type SendTextResponse =
-  | { success: true; id: string }
-  | { success: false; error: string };
+export type SendTextResponse = { id: string };
 
 export type SendMediaResponse = { id: string };
 

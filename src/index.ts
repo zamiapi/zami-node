@@ -9,7 +9,7 @@ import {
 
 const apiBase = "https://api.zamiapi.com";
 
-export default class Zami {
+export class Zami {
   apiSecret: string;
 
   constructor(apiSecret: string) {
@@ -24,12 +24,12 @@ export default class Zami {
         Authorization: `${this.apiSecret}`,
       },
     });
-    const data = (await response.json()) as SendTextResponse;
 
-    if (data.success) {
+    const data = (await response.json()) as SendTextResponse;
+    if (response.status === 201) {
       return data.id;
     } else {
-      throw new Error(data.error);
+      throw new Error(JSON.stringify(data));
     }
   }
 
